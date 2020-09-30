@@ -249,9 +249,9 @@ function oe_theme_helper_post_update_20014() {
   }
 
   if ($block->getTheme() == 'oe_theme') {
-    $block->setVisibilityConfig('oe_theme_helper_current_ecl_template', [
-      'id' => 'oe_theme_helper_current_ecl_template',
-      'ecl_template' => 'standardised',
+    $block->setVisibilityConfig('oe_theme_helper_current_ecl_branding', [
+      'id' => 'oe_theme_helper_current_ecl_branding',
+      'ecl_branding' => 'standardised',
     ]);
     $block->save();
   }

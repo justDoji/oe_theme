@@ -403,39 +403,39 @@ class OeThemeTestContext extends RawDrupalContext {
   }
 
   /**
-   * Assert that the site header correlated to ECL template theme setting.
+   * Assert that the site header correlated to ECL branding theme setting.
    *
-   * @param string $ecl_template
+   * @param string $ecl_branding
    *   The ECL template setting of active theme.
    *
-   * @Then I should see the :ecl_template site header
+   * @Then I should see the :ecl_branding site header
    */
-  public function iShouldSeeTheSiteHeader(string $ecl_template): void {
+  public function iShouldSeeTheSiteHeader(string $ecl_branding): void {
     $templates = [
       'Core' => 'core',
       'Standardised' => 'standardised',
     ];
 
-    if (empty($templates[$ecl_template])) {
-      throw new \Exception("Theme do not support '$ecl_template' ECL template.");
+    if (empty($templates[$ecl_branding])) {
+      throw new \Exception("Theme do not support '$ecl_branding' ECL template.");
     }
 
-    $ecl_template_code = $templates[$ecl_template];
+    $ecl_branding_code = $templates[$ecl_branding];
 
-    $this->assertSession()->elementExists('css', 'a.ecl-site-header-' . $ecl_template_code . '__logo-link .ecl-site-header-' . $ecl_template_code . '__logo-image');
-    $this->assertSession()->elementExists('css', '.ecl-site-header-' . $ecl_template_code . '__top .ecl-site-header-' . $ecl_template_code . '__action .ecl-site-header-' . $ecl_template_code . '__language-selector');
-    $this->assertSession()->elementExists('css', '.ecl-site-header-' . $ecl_template_code . '__top .ecl-site-header-' . $ecl_template_code . '__action .ecl-site-header-' . $ecl_template_code . '__search-container');
+    $this->assertSession()->elementExists('css', 'a.ecl-site-header-' . $ecl_branding_code . '__logo-link .ecl-site-header-' . $ecl_branding_code . '__logo-image');
+    $this->assertSession()->elementExists('css', '.ecl-site-header-' . $ecl_branding_code . '__top .ecl-site-header-' . $ecl_branding_code . '__action .ecl-site-header-' . $ecl_branding_code . '__language-selector');
+    $this->assertSession()->elementExists('css', '.ecl-site-header-' . $ecl_branding_code . '__top .ecl-site-header-' . $ecl_branding_code . '__action .ecl-site-header-' . $ecl_branding_code . '__search-container');
   }
 
   /**
    * Set theme's ECL template setting.
    *
-   * @param string $ecl_template
+   * @param string $ecl_branding
    *   The ECL template setting of active theme.
    *
-   * @Given the theme is configured to use the :ecl_template ECL template
+   * @Given the theme is configured to use the :ecl_branding ECL template
    */
-  public function setEclTemplate(string $ecl_template): void {
+  public function setEclTemplate(string $ecl_branding): void {
     $templates = [
       'Core' => 'core',
       'Standardised' => 'standardised',
@@ -444,7 +444,7 @@ class OeThemeTestContext extends RawDrupalContext {
     $theme_name = \Drupal::theme()->getActiveTheme()->getName();
 
     \Drupal::configFactory()->getEditable($theme_name . '.settings')
-      ->set('template', $templates[$ecl_template])->save();
+      ->set('branding', $templates[$ecl_branding])->save();
 
     // Clears the static cache of DatabaseCacheTagsChecksum.
     // Static caches are typically cleared at the end of the request since a

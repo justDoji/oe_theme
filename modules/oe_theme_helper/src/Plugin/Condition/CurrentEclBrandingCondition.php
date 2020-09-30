@@ -13,17 +13,17 @@ use Drupal\Core\Theme\ThemeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a configurable 'Current ECL template' condition.
+ * Provides a configurable 'Current ECL branding' condition.
  *
- * This condition checks if the current ECL template is equal to a given
+ * This condition checks if the current ECL branding is equal to a given
  * value.
  *
  * @Condition(
- *   id = "oe_theme_helper_current_ecl_template",
- *   label = @Translation("Current ECL template")
+ *   id = "oe_theme_helper_current_ecl_branding",
+ *   label = @Translation("Current ECL branding")
  * )
  */
-class CurrentEclTemplateCondition extends ConditionPluginBase implements ContainerFactoryPluginInterface {
+class CurrentEclBrandingCondition extends ConditionPluginBase implements ContainerFactoryPluginInterface {
 
   /**
    * The configuration factory service.
@@ -77,7 +77,7 @@ class CurrentEclTemplateCondition extends ConditionPluginBase implements Contain
    */
   public function defaultConfiguration() {
     return [
-      'ecl_template' => '',
+      'ecl_branding' => '',
     ] + parent::defaultConfiguration();
   }
 
@@ -88,16 +88,16 @@ class CurrentEclTemplateCondition extends ConditionPluginBase implements Contain
     // We allow for an empty value to be set. By doing that we make sure that
     // no settings about this condition is actually saved in block visibility
     // settings, unless the user explicitly sets one.
-    $form['ecl_template'] = [
+    $form['ecl_branding'] = [
       '#type' => 'select',
-      '#title' => $this->t('ECL template'),
+      '#title' => $this->t('ECL branding'),
       '#options' => [
         '' => $this->t('- Any -'),
         'core' => $this->t('Core'),
         'standardised' => $this->t('Standardised'),
       ],
-      '#default_value' => $this->configuration['ecl_template'],
-      '#description' => t('Choose with which ECL template this condition should be met.'),
+      '#default_value' => $this->configuration['ecl_branding'],
+      '#description' => t('Choose with which ECL branding this condition should be met.'),
     ];
     return parent::buildConfigurationForm($form, $form_state);
   }
@@ -106,7 +106,7 @@ class CurrentEclTemplateCondition extends ConditionPluginBase implements Contain
    * {@inheritdoc}
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
-    $this->configuration['ecl_template'] = $form_state->getValue('ecl_template');
+    $this->configuration['ecl_branding'] = $form_state->getValue('ecl_branding');
     parent::submitConfigurationForm($form, $form_state);
   }
 
@@ -114,28 +114,28 @@ class CurrentEclTemplateCondition extends ConditionPluginBase implements Contain
    * {@inheritdoc}
    */
   public function evaluate() {
-    if (empty($this->configuration['ecl_template'])) {
+    if (empty($this->configuration['ecl_branding'])) {
       return TRUE;
     }
     $theme_name = $this->themeManager->getActiveTheme()->getName();
 
-    $component_library = $this->configFactory->get($theme_name . '.settings')->get('template');
-    return $component_library === $this->configuration['ecl_template'];
+    $ecl_branding = $this->configFactory->get($theme_name . '.settings')->get('branding');
+    return $ecl_branding === $this->configuration['ecl_branding'];
   }
 
   /**
    * {@inheritdoc}
    */
   public function summary() {
-    if (empty($this->configuration['ecl_template'])) {
-      return $this->t('The current ECL template can be set to anything');
+    if (empty($this->configuration['ecl_branding'])) {
+      return $this->t('The current ECL branding can be set to anything');
     }
 
     if ($this->isNegated()) {
-      return $this->t('The current ECL template is not @ecl_template', ['@ecl_template' => $this->configuration['ecl_template']]);
+      return $this->t('The current ECL branding is not @ecl_branding', ['@ecl_branding' => $this->configuration['ecl_branding']]);
     }
 
-    return $this->t('The current ECL template is @ecl_template', ['@ecl_template' => $this->configuration['ecl_template']]);
+    return $this->t('The current ECL branding is @ecl_branding', ['@ecl_branding' => $this->configuration['ecl_branding']]);
   }
 
   /**
